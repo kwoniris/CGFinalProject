@@ -1,11 +1,11 @@
-# Ignore all compressed folders (any folder starting with 'compressed_') and their parent folders
-**/compressed_*/../
+# Ignore all compressed folders (any folder starting with 'compressed_')
+**/compressed_*/
 
 # Ignore any folder that matches the [identifier]_sequences pattern
 *_sequences/
 
 # Ignore the virtual environment folder
-venv/
+.venv/
 
 # Ignore any reference fasta file.
 ref_*.fasta
