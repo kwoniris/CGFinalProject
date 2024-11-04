@@ -45,6 +45,17 @@ def run_golomb_encoding(identifier):
     ]
     subprocess.run(command, check=True)
     print("Finished running golomb_encoding.py")
+    
+def run_elias_gamma_encoding(identifier):
+    """Run elias_gamma.py to compress sequences."""
+    command = [
+        ".venv/Scripts/python", "elias_gamma_encoding.py",
+        "--input_folder", f"{identifier}_sequences",
+        "--reference_file", f"ref_{identifier}.fasta",
+        "--identifier", identifier
+    ]
+    subprocess.run(command, check=True)
+    print("Finished running elias_gamma.py")
 
 def organize_outputs(identifier):
     """Organize output folders into one large folder named after the identifier."""
@@ -83,7 +94,10 @@ if __name__ == "__main__":
     # Run each step of the pipeline
     run_download_data(args.query, args.min_length, args.max_length, args.max_results, args.identifier)
     run_choose_ref(args.identifier)
-    run_golomb_encoding(args.identifier)
+    
+    # TODO: be able to do both at the same time
+    #run_golomb_encoding(args.identifier)
+    run_elias_gamma_encoding(args.identifier)
 
     # Organize all outputs into a single folder
     organize_outputs(args.identifier)

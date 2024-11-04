@@ -55,7 +55,6 @@ def get_ids(term, max_results=50, min_length=16000, max_length=17000, delay=0.5)
 def fetch_sequences(ids, folder, identifier, test_id=None, delay=0.5):
     """
     Fetch and save unique sequences by their IDs. Optionally, save one specific sequence as a test file.
-
     :param ids: List of sequence IDs
     :param folder: Directory to save FASTA files
     :param identifier: Prefix identifier for file names

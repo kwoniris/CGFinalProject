@@ -7,6 +7,9 @@ This project is designed to download, choose a reference, and compress DNA seque
 
 ## Python Files
 
+### 0. Set Up Python Virtual Environment
+On MacOS, use `source .venv/Scripts/activate`
+
 ### 1. `download_data.py`
 Downloads sequences from NCBI based on a specified query, filters them by length, and removes duplicates. It saves the sequences in a specified folder.
 
@@ -22,6 +25,8 @@ Downloads sequences from NCBI based on a specified query, filters them by length
 **Example Usage:**
 ```bash
 python download_data.py --query "Homo sapiens mitochondrion, complete genome" --folder "mtDNA_sequences" --identifier "mtDNA" --max_results 1000 --min_length 16000 --max_length 17000 --delay 0.5
+
+python download_data.py --query "Homo sapiens mitochondrion, complete genome" --folder "mtDNA_sequences" --identifier "mtDNA" --max_results 10 --min_length 16570 --max_length 16571 --delay 0.5
 ```
 
 ### 2. `choose_ref.py`
