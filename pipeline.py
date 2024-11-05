@@ -2,6 +2,8 @@ import subprocess
 import os
 import argparse
 import shutil
+# for MacOS
+import sys
 
 def delete_identifier_folder(identifier):
     """Delete the folder with the name of the identifier if it exists."""
@@ -38,7 +40,7 @@ def run_choose_ref(identifier):
 def run_golomb_encoding(identifier):
     """Run golomb_encoding.py to compress sequences."""
     command = [
-        ".venv/Scripts/python", "golomb_encoding.py",
+        sys.executable, "golomb_encoding.py",
         "--input_folder", f"{identifier}_sequences",
         "--reference_file", f"ref_{identifier}.fasta",
         "--identifier", identifier
@@ -96,8 +98,8 @@ if __name__ == "__main__":
     run_choose_ref(args.identifier)
     
     # TODO: be able to do both at the same time
-    #run_golomb_encoding(args.identifier)
-    run_elias_gamma_encoding(args.identifier)
+    run_golomb_encoding(args.identifier)
+    #run_elias_gamma_encoding(args.identifier)
 
     # Organize all outputs into a single folder
     organize_outputs(args.identifier)
