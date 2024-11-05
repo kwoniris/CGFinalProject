@@ -3,12 +3,14 @@ import os
 import argparse
 import shutil
 import platform
+import sys
 
 def delete_identifier_folder(identifier):
     """Delete the folder with the name of the identifier if it exists."""
     folder_path = identifier
     if os.path.exists(folder_path) and os.path.isdir(folder_path):
         shutil.rmtree(folder_path)
+        print()  # Newline for separation
         print(f"Deleted existing folder: {folder_path}")
 
 def run_download_data(query, min_length, max_length, max_results, identifier):
@@ -24,6 +26,7 @@ def run_download_data(query, min_length, max_length, max_results, identifier):
         "--delay", "0.5"
     ]
     subprocess.run(command, check=True)
+    print()  # Newline for separation
     print("Finished running download_data.py")
 
 def run_choose_ref(identifier):
@@ -34,23 +37,19 @@ def run_choose_ref(identifier):
         "--identifier", identifier
     ]
     subprocess.run(command, check=True)
+    print()  # Newline for separation
     print("Finished running choose_ref.py")
 
 def run_golomb_encoding(identifier):
     """Run golomb_encoding.py to compress sequences."""
-    # Determine the appropriate Python executable path based on the OS
-    if platform.system() == "Windows":
-        python_path = "venv\\Scripts\\python"
-    else:  # macOS or Linux
-        python_path = "venv/bin/python"
-
     command = [
-        python_path, "golomb_encoding.py",
+        sys.executable, "golomb_encoding.py",
         "--input_folder", f"{identifier}_sequences",
         "--reference_file", f"ref_{identifier}.fasta",
         "--identifier", identifier
     ]
     subprocess.run(command, check=True)
+    print()  # Newline for separation
     print("Finished running golomb_encoding.py")
 
 def organize_outputs(identifier):
@@ -60,17 +59,19 @@ def organize_outputs(identifier):
 
     # List of folders to move into the main output folder
     output_folders = [
-        f"compressed_{identifier}_differences",
-        f"compressed_{identifier}_binary_string",
-        f"compressed_{identifier}_binary_bin"
+        f"golomb_{identifier}_differences",
+        f"golomb_{identifier}_binary_string",
+        f"golomb_{identifier}_binary_bin"
     ]
     
     # Move each folder into the final output directory
     for folder in output_folders:
         if os.path.exists(folder):
             shutil.move(folder, final_output_folder)
+            print()  # Newline for separation
             print(f"Moved {folder} into {final_output_folder}")
         else:
+            print()  # Newline for separation
             print(f"Warning: {folder} does not exist and was not moved.")
 
 if __name__ == "__main__":
@@ -94,4 +95,5 @@ if __name__ == "__main__":
 
     # Organize all outputs into a single folder
     organize_outputs(args.identifier)
+    print()  # Newline for separation
     print(f"Pipeline completed. All outputs are organized in the '{args.identifier}' folder.")
