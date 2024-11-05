@@ -2,6 +2,7 @@ import subprocess
 import os
 import argparse
 import shutil
+import platform
 
 def delete_identifier_folder(identifier):
     """Delete the folder with the name of the identifier if it exists."""
@@ -37,8 +38,14 @@ def run_choose_ref(identifier):
 
 def run_golomb_encoding(identifier):
     """Run golomb_encoding.py to compress sequences."""
+    # Determine the appropriate Python executable path based on the OS
+    if platform.system() == "Windows":
+        python_path = "venv\\Scripts\\python"
+    else:  # macOS or Linux
+        python_path = "venv/bin/python"
+
     command = [
-        ".venv/Scripts/python", "golomb_encoding.py",
+        python_path, "golomb_encoding.py",
         "--input_folder", f"{identifier}_sequences",
         "--reference_file", f"ref_{identifier}.fasta",
         "--identifier", identifier
