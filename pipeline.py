@@ -38,7 +38,7 @@ def run_choose_ref(identifier):
 def run_golomb_encoding(identifier):
     """Run golomb_encoding.py to compress sequences."""
     command = [
-        ".venv/Scripts/python", "golomb_encoding.py",
+        "venv/bin/python", "golomb_encoding.py",
         "--input_folder", f"{identifier}_sequences",
         "--reference_file", f"ref_{identifier}.fasta",
         "--identifier", identifier
