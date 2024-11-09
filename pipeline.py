@@ -1,8 +1,7 @@
-import subprocess
 import os
-import argparse
 import shutil
-import platform
+import subprocess
+import argparse
 import sys
 
 def delete_identifier_folder(identifier):
@@ -52,16 +51,17 @@ def run_golomb_encoding(identifier):
     print()  # Newline for separation
     print("Finished running golomb_encoding.py")
     
-def run_elias_gamma_encoding(identifier):
-    """Run elias_gamma.py to compress sequences."""
+def run_elias_encoding(identifier, encoding_type):
+    """Run Elias encoding script to compress sequences with specified encoding type."""
     command = [
-        ".venv/Scripts/python", "elias_gamma_encoding.py",
+        sys.executable, f"elias_encoding.py",
         "--input_folder", f"{identifier}_sequences",
         "--reference_file", f"ref_{identifier}.fasta",
-        "--identifier", identifier
+        "--identifier", identifier,
+        "--encoding", encoding_type
     ]
     subprocess.run(command, check=True)
-    print("Finished running elias_gamma.py")
+    print(f"Finished running elias_encoding.py with {encoding_type} encoding")
 
 def organize_outputs(identifier):
     """Organize output folders into one large folder named after the identifier."""
@@ -72,7 +72,13 @@ def organize_outputs(identifier):
     output_folders = [
         f"golomb_{identifier}_differences",
         f"golomb_{identifier}_binary_string",
-        f"golomb_{identifier}_binary_bin"
+        f"golomb_{identifier}_binary_bin",
+        f"elias_gamma_{identifier}_differences",
+        f"elias_gamma_{identifier}_binary_string",
+        f"elias_gamma_{identifier}_binary_bin",
+        f"elias_delta_{identifier}_differences",
+        f"elias_delta_{identifier}_binary_string",
+        f"elias_delta_{identifier}_binary_bin"
     ]
     
     # Move each folder into the final output directory
@@ -86,13 +92,14 @@ def organize_outputs(identifier):
             print(f"Warning: {folder} does not exist and was not moved.")
 
 if __name__ == "__main__":
-    # Parse command-line arguments
-    parser = argparse.ArgumentParser(description="Pipeline for downloading data, choosing reference, and Golomb encoding.")
+    parser = argparse.ArgumentParser(description="Pipeline for downloading data, choosing reference, and encoding sequences.")
     parser.add_argument("--query", type=str, required=True, help="Search term for NCBI query (e.g., 'Homo sapiens mitochondrion, complete genome')")
     parser.add_argument("--min_length", type=int, required=True, help="Minimum sequence length to filter")
     parser.add_argument("--max_length", type=int, required=True, help="Maximum sequence length to filter")
     parser.add_argument("--max_results", type=int, required=True, help="Maximum number of results to fetch from NCBI")
     parser.add_argument("--identifier", type=str, required=True, help="Identifier for output folder and file naming")
+    parser.add_argument("--encoding", type=str, choices=['golomb', 'gamma', 'delta', 'all'], default='all',
+                        help="Specify the encoding type: 'golomb', 'gamma', 'delta', or 'all' (default).")
 
     args = parser.parse_args()
 
@@ -103,9 +110,15 @@ if __name__ == "__main__":
     run_download_data(args.query, args.min_length, args.max_length, args.max_results, args.identifier)
     run_choose_ref(args.identifier)
     
-    # TODO: be able to do both at the same time
-    run_golomb_encoding(args.identifier)
-    #run_elias_gamma_encoding(args.identifier)
+    # Encoding steps based on user choice
+    if args.encoding in ['golomb', 'all']:
+        run_golomb_encoding(args.identifier)
+    
+    if args.encoding in ['gamma', 'all']:
+        run_elias_encoding(args.identifier, 'gamma')
+    
+    if args.encoding in ['delta', 'all']:
+        run_elias_encoding(args.identifier, 'delta')
 
     # Organize all outputs into a single folder
     organize_outputs(args.identifier)
