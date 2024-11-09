@@ -75,9 +75,11 @@ def main(input_folder, reference_file, identifier, encoding_type):
     if encoding_type in ['gamma', 'all']:
         os.makedirs(f"elias_gamma_{identifier}_binary_string", exist_ok=True)
         os.makedirs(f"elias_gamma_{identifier}_binary_bin", exist_ok=True)
+        os.makedirs(f"elias_gamma_{identifier}_differences", exist_ok=True)
     if encoding_type in ['delta', 'all']:
         os.makedirs(f"elias_delta_{identifier}_binary_string", exist_ok=True)
         os.makedirs(f"elias_delta_{identifier}_binary_bin", exist_ok=True)
+        os.makedirs(f"elias_delta_{identifier}_differences", exist_ok=True)
 
     # Load reference sequence
     reference_record = SeqIO.read(reference_file, "fasta")
@@ -89,36 +91,44 @@ def main(input_folder, reference_file, identifier, encoding_type):
             record = SeqIO.read(input_path, "fasta")
             seq = str(record.seq)
 
+            # Handle both encodings if 'all' is selected
             if encoding_type == 'all':
-                # Run both encodings
+                # Compress using both Gamma and Delta encodings
                 gamma_result = compress_sequence(seq, reference_seq, 'gamma')
                 delta_result = compress_sequence(seq, reference_seq, 'delta')
 
                 # Save Elias Gamma results
-                save_results(gamma_result, f"elias_gamma_{identifier}", filename)
-                # Save Elias Delta results
-                save_results(delta_result, f"elias_delta_{identifier}", filename)
-                
-            else:
-                # Run single encoding
-                result = compress_sequence(seq, reference_seq, encoding_type)
-                save_results(result, f"elias_{encoding_type}_{identifier}", filename)
+                save_results(gamma_result, "elias_gamma", identifier, filename)
 
-def save_results(result, folder_prefix, filename):
-    """Helper function to save compressed results to files."""
+                # Save Elias Delta results
+                save_results(delta_result, "elias_delta", identifier, filename)
+            else:
+                # Compress using the specified encoding type
+                result = compress_sequence(seq, reference_seq, encoding_type)
+                save_results(result, f"elias_{encoding_type}", identifier, filename)
+
+def save_results(result, prefix, identifier, filename):
+    """Helper function to save compressed results to appropriate folders."""
     bitarray_data, differences_str = result
 
-    # Save binary string representation
-    string_output_path = os.path.join(f"{folder_prefix}_binary_string", f"compressed_{filename}.txt")
+    # Save the binary string representation
+    string_output_path = os.path.join(f"{prefix}_{identifier}_binary_string", f"compressed_{filename}.txt")
     with open(string_output_path, "w") as f:
         f.write(''.join(differences_str))
     print(f"Saved binary string to {string_output_path}")
 
-    # Save binary bitarray data to a .bin file
-    binary_output_path = os.path.join(f"{folder_prefix}_binary_bin", f"compressed_{filename}.bin")
+    # Save the binary bitarray data to a .bin file
+    binary_output_path = os.path.join(f"{prefix}_{identifier}_binary_bin", f"compressed_{filename}.bin")
     with open(binary_output_path, "wb") as f:
         bitarray_data.tofile(f)
     print(f"Saved binary data to {binary_output_path}")
+
+    # Save differences string for readability/debugging
+    differences_output_path = os.path.join(f"{prefix}_{identifier}_differences", f"differences_{filename}.txt")
+    with open(differences_output_path, "w") as f:
+        f.write('\n'.join(differences_str))
+    print(f"Saved differences string to {differences_output_path}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compress sequences using Elias Gamma, Delta, or both encodings based on a reference sequence.")

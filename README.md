@@ -63,10 +63,13 @@ Automates the entire process by running `download_data.py`, `choose_ref.py`, and
 - `--max_length`: Maximum sequence length for filtering.
 - `--max_results`: Maximum number of results to fetch from NCBI.
 - `--identifier`: Identifier for output folder and file naming (e.g., `mtDNA`).
+- `--encoding`: User specifies which encodings to generate (choices are, `golomb`, `gamma`, `delta`, `all`).
 
 **Example Usage:**
 ```bash
-python pipeline.py --query "Homo sapiens mitochondrion, complete genome" --min_length 16000 --max_length 17000 --max_results 1000 --identifier "mtDNA"
+python pipeline.py --query "Homo sapiens mitochondrion, complete genome" --min_length 16000 --max_length 17000 --max_results 1000 --identifier "mtDNA" --encoding all
+
+python pipeline.py --query "Hepatitis B Virus, complete genome" --min_length 3000 --max_length 4000 --max_results 50 --identifier "HBV" --encoding all
 ```
 
 ---
@@ -76,7 +79,7 @@ python pipeline.py --query "Homo sapiens mitochondrion, complete genome" --min_l
 Each run of the pipeline organizes output folders under a main folder named `[identifier]`, which contains the following subfolders:
 
 1. **`[identifier]_sequences`**: Folder for the downloaded sequences from `download_data.py`.
-2. **`compressed_[identifier]_differences`**: Contains the intermediate text files with Golomb-encoded differences for each sequence relative to the reference.
+2. **`compressed_[identifier]_differences`**: Contains the intermediate text files with encoded differences for each sequence relative to the reference.
 3. **`compressed_[identifier]_binary_string`**: Contains the binary string representation of the compressed sequences.
 4. **`compressed_[identifier]_binary_bin`**: Contains the final compressed sequences in binary format as `.bin` files for efficient storage.
 
