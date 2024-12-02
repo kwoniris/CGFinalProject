@@ -48,7 +48,7 @@ def compute_diff(binary_data, reference_data):
     diff_data = bytes(a ^ b for a, b in zip(binary_data, reference_data))
     return diff_data
 
-def bin_to_colorful_qr(input_folder, output_folder, identifier, reference_file):
+def bin_to_colorful_image(input_folder, output_folder, identifier, reference_file):
     import numpy as np
     os.makedirs(output_folder, exist_ok=True)
 
@@ -73,54 +73,45 @@ def bin_to_colorful_qr(input_folder, output_folder, identifier, reference_file):
         # Compute the XOR difference between the binary file and the reference file
         diff_data = compute_diff(binary_data, reference_data)
 
-        # Create a QR code
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(diff_data)
-        qr.make(fit=True)
+        # Determine image dimensions
+        diff_length = len(diff_data)
+        image_size = int(np.ceil(np.sqrt(diff_length)))
+        total_pixels = image_size ** 2
 
-        # Extract the QR matrix
-        qr_matrix = qr.modules
-        size = len(qr_matrix)
+        # Pad diff_data to ensure it fills a complete square
+        padded_diff_data = list(diff_data) + [0] * (total_pixels - diff_length)
+        assert len(padded_diff_data) == total_pixels, "Padding failed: Incorrect total pixels"
 
-        # Create an image array
-        img_array = np.zeros((size * qr.box_size, size * qr.box_size, 3), dtype=np.uint8)
-        
-        # Map binary data to pixel colors
-        diff_values = list(diff_data)  # Convert byte data to a list of integers
-        diff_colors = [
-            (value, 255 - value, (value * 2) % 255)  # Example: RGB based on XOR value
-            for value in diff_values
-        ]
+        # Convert to a NumPy array and reshape into an image
+        diff_array = np.array(padded_diff_data, dtype=np.uint8).reshape((image_size, image_size))
+        assert diff_array.shape == (image_size, image_size), "Reshaping failed: Incorrect shape"
 
-        # Fill the image array with colors
-        color_idx = 0  # Index to traverse the diff_colors
-        for y, row in enumerate(qr_matrix):
-            for x, val in enumerate(row):
-                if val:  # If the module (QR pixel) is black
-                    if color_idx < len(diff_colors):
-                        color = diff_colors[color_idx]
-                        color_idx += 1
-                    else:
-                        color = (0, 0, 0)  # Default to black if out of diff_data
-                    for i in range(qr.box_size):
-                        for j in range(qr.box_size):
-                            img_array[
-                                y * qr.box_size + i, x * qr.box_size + j
-                            ] = color
+        # Map binary differences to RGB colors
+        image_array = np.zeros((image_size, image_size, 3), dtype=np.uint8)
+        for i, value in enumerate(diff_array.flatten()):
+            row, col = divmod(i, image_size)
+            int_value = int(value)  # Explicitly cast to int to handle overflow safely
+            image_array[row, col] = (
+                np.clip(int_value, 0, 255),                 # Red channel
+                np.clip(255 - int_value, 0, 255),          # Green channel
+                np.clip((int_value * 2) % 256, 0, 255)     # Blue channel
+            )
 
-        # Convert the numpy array to an image
-        img = Image.fromarray(img_array, 'RGB')
+        # Convert the NumPy array to an image
+        img = Image.fromarray(image_array, 'RGB')
 
         # Save the image
-        output_filename = f"{identifier}_{os.path.splitext(bin_file)[0]}_diff_colorful.png"
+        output_filename = f"{identifier}_{os.path.splitext(bin_file)[0]}_colorful.png"
         output_path = os.path.join(output_folder, output_filename)
-        img.save(output_path)
-        print(f"Saved colorful QR code with diff representation to {output_path}")
+        
+        try:
+            with open(output_path, "wb") as f:
+                img.save(f, format="PNG")
+            print(f"Image saved successfully: {output_path}")
+        except Exception as e:
+            print(f"Failed to save image: {e}")
+
+        print(f"Saved colorful difference image to {output_path}")
 
 if __name__ == "__main__":
     # Command-line argument parsing
@@ -131,4 +122,4 @@ if __name__ == "__main__":
     parser.add_argument("--reference_file", required=True, help="Path to the reference FASTA file for comparison.")
     
     args = parser.parse_args()
-    bin_to_colorful_qr(args.input_folder, args.output_folder, args.identifier, args.reference_file)
+    bin_to_colorful_image(args.input_folder, args.output_folder, args.identifier, args.reference_file)
