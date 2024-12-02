@@ -16,7 +16,7 @@ Before running the script, ensure that the following dependencies are installed:
 You can install the required libraries using `pip`:
 
 ```bash
-pip install qrcode[pil]
+pip install "qrcode[pil]"
 ```
 ## Usage 
 ### 1. Running the Script for Generating Colorful QR Codes Based on Differences in Binary Files
