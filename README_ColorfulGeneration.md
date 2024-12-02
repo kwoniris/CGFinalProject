@@ -1,5 +1,5 @@
 # CGFinalProject Part 2 
-Colorful QR Code Generation from Binary Files
+## Colorful QR Code Generation from Binary Files
 
 This project takes binary files as input, compares them byte by byte to the reference FASTA sequence identified from previous `pipeline.py`, and generates colorful QR code image representing the differences between each binary file and the reference. The colors are unique for each file. 
 
