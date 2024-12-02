@@ -1,7 +1,7 @@
 # CGFinalProject Part 2 
 Colorful QR Code Generation from Binary Files
 
-This project takes binary files as input, compares them byte by byte, and generates colorful QR codes representing the differences between those files. These QR codes can then be scanned and decoded to retrieve the differences between the binary files.
+This project takes binary files as input, compares them byte by byte to the reference FASTA sequence identified from previous `pipeline.py`, and generates colorful QR code image representing the differences between each binary file and the reference. The colors are unique for each file. 
 
 ---
 ## Prerequisites
@@ -22,24 +22,25 @@ pip install "qrcode[pil]"
 ### 1. Running the Script for Generating Colorful QR Codes Based on Differences in Binary Files
 To generate colorful QR codes based on the differences between .bin files, run the following command:
 
+**Command to Run the Script:**
 ```bash
-python binary_to_colorful_qr.py --input_folder "<input_folder_path>" --output_folder "<output_folder_path>" --identifier "<identifier>"
+python binary_to_colorful_qr.py --input_folder "<input_folder_path>" --output_folder "<output_folder_path>" --identifier "<identifier>" --reference_file "/path/to/ref_HBV.fasta"
 ```
 
-Arguments:
+**Arguments:**
 * --input_folder: Path to the folder containing .bin files.
 * --output_folder: Path to the folder where the generated QR code images will be saved.
 * --identifier: An identifier used for naming the output files (e.g., "HBV" for Hepatitis B Virus).
 
-**Example:** 
+**Example Run:** 
 ```bash
-python binary_to_colorful_qr.py --input_folder "/Users/iriskwon/CGFinalProject/HBV/compressed_HBV_binary_bin" --output_folder "HBV_colorful_qr_codes" --identifier "HBV"
+python binary_to_colorful_qr.py --input_folder "/Users/iriskwon/CGFinalProject/HBV/compressed_HBV_binary_bin" --output_folder "HBV_colorful_qr_codes" --identifier "HBV" --reference_file "/Users/iriskwon/CGFinalProject/ref_HBV.fasta"
 ```
 
-### What the script does:
-* **Compares Binary Files:** It reads and compares each pair of binary files in the specified input folder.
-* **Generates Colorful QR Codes:** Generates a unique QR code for each pair of files based on their differences. The QR codes will only encode the differing bytes between the files.
-* **Saves QR Codes:** Each QR code will be saved in the specified output folder, and the filename will reflect the two files being compared.
+## What the script does:
+* **Converts the reference FASTA file from `pipeline.py` to binary** and compares each .bin file from the specified binary bin folder against the reference.
+* **Generates Colorful QR Codes:** Generates a unique QR code for each file basd on the XOR differences between it and the reference FASTA sequence. 
+* **Saves QR Codes:** Generated QR code image is saved with filename indicating the identifier and differences between the files. 
 
 **Example Output:**
 ```bash
