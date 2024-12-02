@@ -32,9 +32,9 @@ python binary_to_colorful_qr.py --input_folder "<input_folder_path>" --output_fo
 * --output_folder: Path to the folder where the generated QR code images will be saved.
 * --identifier: An identifier used for naming the output files (e.g., "HBV" for Hepatitis B Virus).
 
-**Example Run:** 
+**Example Run: (using elias delta) ** 
 ```bash
-python binary_to_colorful_qr.py --input_folder "/Users/iriskwon/CGFinalProject/HBV/compressed_HBV_binary_bin" --output_folder "HBV_colorful_qr_codes" --identifier "HBV" --reference_file "/Users/iriskwon/CGFinalProject/ref_HBV.fasta"
+python binary_to_colorful_qr.py --input_folder "/Users/iriskwon/CGFinalProject/HBV/elias_delta_HBV_binary_bin" --output_folder "HBV_colorful_qr_codes" --identifier "HBV" --reference_file "/Users/iriskwon/CGFinalProject/ref_HBV.fasta"
 ```
 
 ## What the script does:
