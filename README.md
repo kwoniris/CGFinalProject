@@ -8,7 +8,13 @@ This project is designed to download, choose a reference, and compress DNA seque
 ## Python Files
 
 ### 0. Set Up Python Virtual Environment
-On MacOS, use `source .venv/Scripts/activate`
+Create the environment by first using:
+`python -m venv cg_venv`
+`source cg_venv/bin/activate`
+`pip install -r requirements.txt`
+
+Activate the environment by using:
+`source cg_venv/bin/activate`
 
 ### 1. `download_data.py`
 Downloads sequences from NCBI based on a specified query, filters them by length, and removes duplicates. It saves the sequences in a specified folder.

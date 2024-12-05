@@ -5,8 +5,8 @@ from Bio import Entrez, SeqIO
 from hashlib import md5
 from tqdm import tqdm  # Import tqdm for the progress bar
 
-# Set your email to comply with NCBI requirements
-Entrez.email = "clarajeon126@gmail.com"  # Replace with your actual email
+# Set email to comply with NCBI 
+Entrez.email = "clarajeon126@gmail.com"
 
 def get_ids(term, max_results=50, min_length=16000, max_length=17000, delay=0.5):
     """
