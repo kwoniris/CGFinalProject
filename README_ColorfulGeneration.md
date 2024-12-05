@@ -31,6 +31,7 @@ python binary_to_colorful_qr.py --input_folder "<input_folder_path>" --output_fo
 * --input_folder: Path to the folder containing .bin files.
 * --output_folder: Path to the folder where the generated QR code images will be saved.
 * --identifier: An identifier used for naming the output files (e.g., "HBV" for Hepatitis B Virus).
+* --reference_file: An identifier for the reference genome sequence from previous run on ```pipeline.py```. 
 
 **Example Run: (using elias delta)** 
 ```bash
