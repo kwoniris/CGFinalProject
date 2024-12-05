@@ -4,7 +4,7 @@ from Bio import SeqIO
 from bitarray import bitarray
 from math import log2, floor
 
-# Ensure nucleotide to binary mappings are correct
+# Mapping nucleotides to binary codes
 nucleotide_to_bits = {
     'A': '00',
     'C': '01',
@@ -45,12 +45,22 @@ def compress_sequence(seq, reference, m):
             differences_bitarray.extend(pos_bits + sub_bits)
             differences_str.append(pos_bits + sub_bits)
 
+<<<<<<< HEAD
     return differences_bitarray, ''.join(differences_str)
 
 def main(input_folder, reference_file, identifier):
     # Ensure output folders exist
     os.makedirs(f"compressed_{identifier}_binary_string", exist_ok=True)
     os.makedirs(f"compressed_{identifier}_binary_bin", exist_ok=True)
+=======
+    return differences_bitarray, differences_str  # Return both bitarray and list of differences
+
+def main(input_folder, reference_file, identifier):
+    # Ensure output folders exist
+    os.makedirs(f"golomb_{identifier}_binary_string", exist_ok=True)
+    os.makedirs(f"golomb_{identifier}_binary_bin", exist_ok=True)
+    os.makedirs(f"golomb_{identifier}_differences", exist_ok=True)
+>>>>>>> 3f3e145591969a898e4add2751cf51195acf0919
 
     # Load reference sequence
     reference_record = SeqIO.read(reference_file, "fasta")
@@ -66,6 +76,7 @@ def main(input_folder, reference_file, identifier):
             seq = str(record.seq)
 
             # Compress sequence relative to reference
+<<<<<<< HEAD
             bitarray_data, binary_str_data = compress_sequence(seq, reference_seq, m)
 
             # Save the binary string representation
@@ -79,6 +90,27 @@ def main(input_folder, reference_file, identifier):
             with open(binary_output_path, "wb") as f:
                 bitarray_data.tofile(f)
             print(f"Saved binary data to {binary_output_path}")
+=======
+            bitarray_data, differences_str = compress_sequence(seq, reference_seq, m)
+
+            # Save the binary string representation
+            string_output_path = os.path.join(f"golomb_{identifier}_binary_string", f"compressed_{filename}.txt")
+            with open(string_output_path, "w") as f:
+                f.write(''.join(differences_str))
+            print(f"Saved binary string to {string_output_path}")
+
+            # Save the binary bitarray data to a .bin file
+            binary_output_path = os.path.join(f"golomb_{identifier}_binary_bin", f"compressed_{filename}.bin")
+            with open(binary_output_path, "wb") as f:
+                bitarray_data.tofile(f)
+            print(f"Saved binary data to {binary_output_path}")
+
+            # Save differences string for readability/debugging
+            differences_output_path = os.path.join(f"golomb_{identifier}_differences", f"differences_{filename}.txt")
+            with open(differences_output_path, "w") as f:
+                f.write('\n'.join(differences_str))
+            print(f"Saved differences string to {differences_output_path}")
+>>>>>>> 3f3e145591969a898e4add2751cf51195acf0919
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compress sequences using Golomb encoding based on a reference sequence.")
@@ -87,4 +119,8 @@ if __name__ == "__main__":
     parser.add_argument("--identifier", type=str, required=True, help="Identifier for naming output folders.")
 
     args = parser.parse_args()
+<<<<<<< HEAD
     main(args.input_folder, args.reference_file, args.identifier)
+=======
+    main(args.input_folder, args.reference_file, args.identifier)
+>>>>>>> 3f3e145591969a898e4add2751cf51195acf0919
