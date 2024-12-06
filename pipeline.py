@@ -45,7 +45,8 @@ def run_golomb_encoding(identifier):
         sys.executable, "golomb_encoding.py",
         "--input_folder", f"{identifier}_sequences",
         "--reference_file", f"ref_{identifier}.fasta",
-        "--identifier", identifier
+        "--identifier", identifier,
+        "--m", "128"
     ]
     subprocess.run(command, check=True)
     print()  # Newline for separation
