@@ -78,6 +78,13 @@ python pipeline.py --query "Homo sapiens mitochondrion, complete genome" --min_l
 python pipeline.py --query "Hepatitis B Virus, complete genome" --min_length 3000 --max_length 4000 --max_results 50 --identifier "HBV" --encoding all
 ```
 
+### 5. `comparisons.py`
+Analyzes and compares the efficiency of three encoding methods: Golomb, Gamma, and Delta. It compresses sequences from an input folder relative to a reference sequence, tracks compression times and rates, and visualizes results.
+
+**Example Usage:**
+```bash
+python comparisons.py
+```
 ---
 
 ## Data Folders
