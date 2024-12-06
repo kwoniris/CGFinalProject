@@ -54,10 +54,11 @@ Compresses each sequence from the specified folder relative to the reference seq
 - `--input_folder`: Folder containing the FASTA files to compress (e.g., `"mtDNA_sequences"`).
 - `--reference_file`: Reference FASTA file against which sequences will be compressed (e.g., `"ref_mtDNA.fasta"`).
 - `--identifier`: Identifier used to name output folders and files (e.g., `mtDNA`).
+- `--m`: constant m used
 
 **Example Usage:**
 ```bash
-python golomb_encoding.py --input_folder "mtDNA_sequences" --reference_file "ref_mtDNA.fasta" --identifier "mtDNA"
+python golomb_encoding.py --input_folder "mtDNA_sequences" --reference_file "ref_mtDNA.fasta" --identifier "mtDNA" --m 128
 ```
 
 ### 4. `pipeline.py`
@@ -84,6 +85,27 @@ Analyzes and compares the efficiency of three encoding methods: Golomb, Gamma, a
 **Example Usage:**
 ```bash
 python comparisons.py
+```
+
+### 6. `simulate.py`
+Generates a simulated set of DNA sequences with specific mutation distributions. This is useful for testing compression algorithms on controlled datasets.
+
+**Example Usage:**
+```bash
+python simulate.py
+```
+
+### 6. `golomb_m_testing.py`
+Tests different values of the Golomb encoding parameter m (from 2 to 40) to find the optimal value for compression. It calculates and visualizes the average compression ratio for each value of m.
+
+**Command-line arguments:**
+- `--input_folder`: Folder containing the FASTA files to compress
+- `--reference_file`: Reference FASTA file against which sequences will be compressed
+- `--temp_output_folder`: Temporary folder to store intermediate compressed files.
+
+**Example Usage:**
+```bash
+python golomb_m_testing.py --input_folder "mtDNA_sequences" --reference_file "ref_mtDNA.fasta" --temp_output_folder "temp_compressed"
 ```
 ---
 
