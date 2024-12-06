@@ -8,7 +8,13 @@ This project is designed to download, choose a reference, and compress DNA seque
 ## Python Files
 
 ### 0. Set Up Python Virtual Environment
-On MacOS, use `source .venv/Scripts/activate`
+Create the environment by first using:
+`python -m venv cg_venv`
+`source cg_venv/bin/activate`
+`pip install -r requirements.txt`
+
+Activate the environment by using:
+`source cg_venv/bin/activate`
 
 ### 1. `download_data.py`
 Downloads sequences from NCBI based on a specified query, filters them by length, and removes duplicates. It saves the sequences in a specified folder.
@@ -72,6 +78,13 @@ python pipeline.py --query "Homo sapiens mitochondrion, complete genome" --min_l
 python pipeline.py --query "Hepatitis B Virus, complete genome" --min_length 3000 --max_length 4000 --max_results 50 --identifier "HBV" --encoding all
 ```
 
+### 5. `comparisons.py`
+Analyzes and compares the efficiency of three encoding methods: Golomb, Gamma, and Delta. It compresses sequences from an input folder relative to a reference sequence, tracks compression times and rates, and visualizes results.
+
+**Example Usage:**
+```bash
+python comparisons.py
+```
 ---
 
 ## Data Folders
