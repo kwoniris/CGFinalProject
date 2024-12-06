@@ -51,8 +51,8 @@ def generate_sequences(fasta_file, p, num_sequences, output_folder):
     print(f"Simulated sequences written to folder: {output_folder}")
 
 # Example usage
-fasta_file = "ref_HBV.fasta"  # Replace with your reference FASTA file
-output_folder = "simHBV_sequences"  # Folder to store the output FASTA files
+fasta_file = "ref_sample.fasta"  # Replace with your reference FASTA file
+output_folder = "sample_sequences"  # Folder to store the output FASTA files
 p = 0.1  # Probability parameter for geometric distribution
 num_sequences = 15
 

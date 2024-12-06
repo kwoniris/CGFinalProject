@@ -2,7 +2,7 @@ import os
 import argparse
 from Bio import SeqIO
 from bitarray import bitarray
-from math import log2, floor
+from math import log2, ceil
 
 # Mapping nucleotides to binary codes
 nucleotide_to_bits = {
@@ -18,7 +18,7 @@ def golomb_encode(value, m):
     q = value // m  # quotient
     r = value % m   # remainder
     unary_code = '1' * q + '0'  # Unary encode the quotient
-    b = floor(log2(m))
+    b = ceil(log2(m))
     k = (1 << b) - m
     if r < k:
         remainder_code = format(r, f'0{b}b')
@@ -36,18 +36,18 @@ def compress_sequence(seq, reference, m):
         if ref_nuc != seq_nuc and seq_nuc in nucleotide_to_bits:
             relative_position = i - last_position
             last_position = i
-            
+
             # Golomb encode position and add substitution binary
             pos_bits = golomb_encode(relative_position, m)
             sub_bits = nucleotide_to_bits[seq_nuc]
-            
+
             # Append to bitarray and binary string list
             differences_bitarray.extend(pos_bits + sub_bits)
             differences_str.append(pos_bits + sub_bits)
 
     return differences_bitarray, differences_str  # Return both bitarray and list of differences
 
-def main(input_folder, reference_file, identifier):
+def main(input_folder, reference_file, identifier, m):
     # Ensure output folders exist
     os.makedirs(f"golomb_{identifier}_binary_string", exist_ok=True)
     os.makedirs(f"golomb_{identifier}_binary_bin", exist_ok=True)
@@ -56,9 +56,6 @@ def main(input_folder, reference_file, identifier):
     # Load reference sequence
     reference_record = SeqIO.read(reference_file, "fasta")
     reference_seq = str(reference_record.seq)
-
-    # Golomb parameter
-    m = 128
 
     for filename in os.listdir(input_folder):
         if filename.endswith(".fasta"):
@@ -92,6 +89,7 @@ if __name__ == "__main__":
     parser.add_argument("--input_folder", type=str, required=True, help="Folder containing the FASTA files to compress.")
     parser.add_argument("--reference_file", type=str, required=True, help="Reference FASTA file for compression.")
     parser.add_argument("--identifier", type=str, required=True, help="Identifier for naming output folders.")
+    parser.add_argument("--m", type=int, required=True, help="Golomb encoding parameter m.")
 
     args = parser.parse_args()
-    main(args.input_folder, args.reference_file, args.identifier)
+    main(args.input_folder, args.reference_file, args.identifier, args.m)

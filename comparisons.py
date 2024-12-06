@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from golomb_encoding import compress_sequence as golomb_compress  # Golomb compression
 from elias_encoding import compress_sequence as elias_compress  # Elias compression
+from Bio import SeqIO
 
 def get_sequence_files(input_folder):
     """
@@ -25,10 +26,10 @@ def compress_sequence_and_track(sequence_file, reference_file, identifier, encod
 
     # Read the sequence from the file
     with open(sequence_file, "r") as f:
-        seq = f.read().strip()
+        seq = str(SeqIO.read(sequence_file, "fasta").seq)
 
     # Compress the sequence using the selected encoding type
-    reference_seq = open(reference_file, "r").read().strip()
+    reference_seq = str(SeqIO.read(reference_file, "fasta").seq)
 
     if encoding_type == "golomb":
         bitarray_data, _ = golomb_compress(seq, reference_seq, m)
@@ -128,11 +129,14 @@ def main():
     # Example parameters
     input_folders = {
         "mtDNA": "mtDNA_sequences",
-        "HBV": "HBV_sequences"
+        "HBV": "HBV_sequences",
+        "simHBV": "simHBV_sequences"
+
     }
     reference_files = {
         "mtDNA": "ref_mtDNA.fasta",
-        "HBV": "ref_HBV.fasta"
+        "HBV": "ref_HBV.fasta",
+        "simHBV": "ref_HBV.fasta"
     }
     m = 128  # Golomb parameter (adjust based on your data)
     output_folder = "compressed_output"  # Folder where all compressed files will be saved
@@ -154,4 +158,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
