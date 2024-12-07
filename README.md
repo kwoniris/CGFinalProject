@@ -8,13 +8,10 @@ This project is designed to download, choose a reference, and compress DNA seque
 ## Python Files
 
 ### 0. Set Up Python Virtual Environment
-Create the environment by first using:
-`python -m venv cg_venv`
-`source cg_venv/bin/activate`
+Create and activate the environment by first using:
+`python -m venv venv`
+`source venv/bin/activate`
 `pip install -r requirements.txt`
-
-Activate the environment by using:
-`source cg_venv/bin/activate`
 
 ### 1. `download_data.py`
 Downloads sequences from NCBI based on a specified query, filters them by length, and removes duplicates. It saves the sequences in a specified folder.
@@ -58,7 +55,7 @@ Compresses each sequence from the specified folder relative to the reference seq
 
 **Example Usage:**
 ```bash
-python golomb_encoding.py --input_folder "mtDNA_sequences" --reference_file "ref_mtDNA.fasta" --identifier "mtDNA" --m 128
+python golomb_encoding.py --input_folder "mtDNA_sequences" --reference_file "ref_mtDNA.fasta" --identifier "mtDNA" --m "128"
 ```
 
 ### 4. `pipeline.py`
@@ -80,7 +77,9 @@ python pipeline.py --query "Hepatitis B Virus, complete genome" --min_length 300
 ```
 
 ### 5. `comparisons.py`
-Analyzes and compares the efficiency of three encoding methods: Golomb, Gamma, and Delta. It compresses sequences from an input folder relative to a reference sequence, tracks compression times and rates, and visualizes results.
+Analyzes and compares the efficiency of three encoding methods: Golomb, Gamma, and Delta. It compresses sequences from an input folder relative to a reference sequence, tracks compression times and rates, and visualizes results. In order to run this the general set of sequences is required, therefore pipeline.py needs to be ran before.
+
+To test different genomes change the first index of input_folder.
 
 **Example Usage:**
 ```bash
@@ -88,7 +87,7 @@ python comparisons.py
 ```
 
 ### 6. `simulate.py`
-Generates a simulated set of DNA sequences with specific mutation distributions. This is useful for testing compression algorithms on controlled datasets.
+Generates a simulated set of DNA sequences with specific mutation distributions. This is useful for testing compression algorithms on controlled datasets. Note that `ref_HBV.fasta` is required to run this code. Running the pipeline for HBV will generate this file.
 
 **Example Usage:**
 ```bash
@@ -105,7 +104,7 @@ Tests different values of the Golomb encoding parameter m (from 2 to 40) to find
 
 **Example Usage:**
 ```bash
-python golomb_m_testing.py --input_folder "mtDNA_sequences" --reference_file "ref_mtDNA.fasta" --temp_output_folder "temp_compressed"
+python golomb_m_testing.py --input_folder "HBV_sequences" --reference_file "ref_HBV.fasta" --temp_output_folder "temp_compressed"
 ```
 ---
 

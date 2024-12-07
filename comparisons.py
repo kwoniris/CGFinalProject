@@ -113,16 +113,17 @@ def plot_compression_comparison(sequence_names, compression_rates, compression_t
 
 def main():
 
+    # EDIT HERE TO TEST DIFFERENT GENOMES
+    # The sequence string in index 0 is the one that will be compared
     input_folders = {
-        "mtDNA": "mtDNA_sequences",
         "HBV": "HBV_sequences",
-        "simHBV": "simHBV_sequences"
-
+        "simHBV": "simHBV_sequences",
+        "mtDNA": "mtDNA_sequences"
     }
     reference_files = {
-        "mtDNA": "ref_mtDNA.fasta",
         "HBV": "ref_HBV.fasta",
-        "simHBV": "ref_HBV.fasta"
+        "simHBV": "ref_HBV.fasta",
+        "mtDNA": "ref_mtDNA.fasta"
     }
     m = 128  
     output_folder = "compressed_output" 
