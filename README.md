@@ -1,7 +1,7 @@
 # CGFinalProject
 Computational Genomics Final Project 
 
-This project is designed to download, choose a reference, and compress DNA sequences using Golomb encoding. The workflow is managed through a `pipeline.py` script, which coordinates the other scripts to automate the process.
+This project is designed to download, choose a reference, and compress DNA sequences using Golomb and Elias encoding. Further, the project attempts to visualize these compressed sequences. The workflow is managed through a `pipeline.py` script, which coordinates the other scripts to automate the process. 
 
 ---
 
@@ -109,7 +109,7 @@ python golomb_m_testing.py --input_folder "mtDNA_sequences" --reference_file "re
 ```
 ---
 
-## Data Folders
+## Data Folders from Pipeline
 
 Each run of the pipeline organizes output folders under a main folder named `[identifier]`, which contains the following subfolders:
 
@@ -128,4 +128,3 @@ Each run of the pipeline organizes output folders under a main folder named `[id
   ```
   
 This project provides a pipeline for compressing DNA sequences, but it can be applied to various organisms and sequence types by changing the NCBI query in `download_data.py`.
-```
